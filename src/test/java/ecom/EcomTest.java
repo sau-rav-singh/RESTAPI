@@ -8,6 +8,7 @@ import lombok.Data;
 import org.testng.annotations.Test;
 
 import java.io.File;
+import java.util.List;
 
 import static io.restassured.RestAssured.given;
 
@@ -35,9 +36,27 @@ public class EcomTest {
         productId = js.getString("productId");
     }
 
-    @Test(dependsOnMethods = "addProduct")
+   @Test(dependsOnMethods = "addProduct")
     public void createOrder() {
+        OrderList.Order order = new OrderList.Order();
+        order.setCountry("India");
+        order.setProductOrderedId(productId);
+        OrderList orderList = new OrderList();
+        orderList.setOrders(List.of(order));
 
+        RequestSpecification addProductRequestSpec = new RequestSpecBuilder().setBaseUri("https://rahulshettyacademy.com").setContentType(ContentType.JSON).addHeader("Authorization", loginToken).build();
+        RequestSpecification addProduct = given().spec(addProductRequestSpec).body(orderList);
+        String createOrderResponse = addProduct.when().post("api/ecom/order/create-order").then().extract().asString();
+        System.out.println("createOrderResponse "+createOrderResponse);
+
+    }
+
+    @Test(dependsOnMethods = "createOrder")
+    public void deleteProduct() {
+        RequestSpecification deleteProductRequestSpec = new RequestSpecBuilder().setBaseUri("https://rahulshettyacademy.com").addHeader("Authorization", loginToken).build();
+        RequestSpecification addProduct = given().spec(deleteProductRequestSpec).pathParam("productId",productId);
+        String deleteProductResponse = addProduct.when().delete("api/ecom/product/delete-product/{productId}").then().extract().asString();
+        System.out.println("deleteProductResponse "+deleteProductResponse);
 
     }
 
@@ -52,5 +71,16 @@ public class EcomTest {
         private String token;
         private String userId;
         private String message;
+    }
+
+    @Data
+    public static class OrderList {
+        private List<Order> orders;
+
+        @Data
+        public static class Order {
+            private String country;
+            private String productOrderedId;
+        }
     }
 }
