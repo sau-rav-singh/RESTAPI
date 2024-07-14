@@ -1,17 +1,18 @@
+package RSV;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
 
-public class RSV {
+public class GetWMRatesTest {
 
     public static void main(String[] args) {
         try {
-            String uatJson = new String(Files.readAllBytes(Paths.get("src/test/resources/getWMRatesUAT.json")));
-            String prodJson = new String(Files.readAllBytes(Paths.get("src/test/resources/getWMRatesPROD.json")));
+            String uatJson = new String(Files.readAllBytes(Paths.get("src/test/java/RSV/getWMRatesUAT.json")));
+            String prodJson = new String(Files.readAllBytes(Paths.get("src/test/java/RSV/getWMRatesPROD.json")));
 
             List<Map<String, Object>> uatData = parseJson(uatJson);
             List<Map<String, Object>> prodData = parseJson(prodJson);
