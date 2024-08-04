@@ -9,7 +9,8 @@ public class ComplexJsonPojoTest {
     public static void main(String[] args) {
         ObjectMapper mapper = new ObjectMapper();
         try {
-            ComplexJson.ComplexJsonData complexJsonData = mapper.readValue(new File("src/test/resources/complex.json"), ComplexJson.ComplexJsonData.class);
+            File file =new File("src/test/resources/complex.json");
+            ComplexJson.ComplexJsonData complexJsonData = mapper.readValue(file, ComplexJson.ComplexJsonData.class);
 
             List<ComplexJson.Course> courses = complexJsonData.getCourses();
             System.out.println("Count of all the courses is " + courses.size());
