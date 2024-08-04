@@ -7,7 +7,7 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 
-public class ComplexJson {
+public class ComplexJsonTest {
     public static void main(String[] args) {
         try {
             String jsonContent = new String(Files.readAllBytes(Paths.get("src/test/resources/complex.json")));
