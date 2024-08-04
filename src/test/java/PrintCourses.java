@@ -9,7 +9,6 @@ import java.util.Map;
 public class PrintCourses {
     @SneakyThrows
     public static void main(String[] args) {
-
         ObjectMapper objectMapper = new ObjectMapper();
         File file = new File("src/test/resources/Courses.json");
         CourseDetails courseDetails = objectMapper.readValue(file, CourseDetails.class);
