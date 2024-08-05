@@ -1,4 +1,4 @@
-package ecom;
+package tests;
 
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.http.ContentType;
@@ -30,7 +30,7 @@ public class EcomTest {
     @Test(dependsOnMethods = "loginTest")
     public void addProduct() {
         RequestSpecification addProductRequestSpec = new RequestSpecBuilder().setBaseUri("https://rahulshettyacademy.com").addHeader("Authorization", loginToken).build();
-        RequestSpecification addProduct = given().spec(addProductRequestSpec).param("productName", "Sexy Gomez").param("productAddedBy", loginUserId).param("productCategory", "productCategory").param("productSubCategory", "Baby").param("productPrice", "1").param("productDescription", "HotAsHell").param("productFor", "Men").multiPart("productImage", new File("src/test/java/ecom/SG.png"));
+        RequestSpecification addProduct = given().spec(addProductRequestSpec).param("productName", "Sexy Gomez").param("productAddedBy", loginUserId).param("productCategory", "productCategory").param("productSubCategory", "Baby").param("productPrice", "1").param("productDescription", "HotAsHell").param("productFor", "Men").multiPart("productImage", new File("src/test/resources/SG.png"));
         String addProductResponse = addProduct.when().post("api/ecom/product/add-product").then().extract().asString();
         JsonPath js = new JsonPath(addProductResponse);
         productId = js.getString("productId");

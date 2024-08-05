@@ -17,7 +17,7 @@ public class JiraTest {
     private static final String BASE_URI = "https://restassuredjira.atlassian.net";
     private static final String AUTH_HEADER = "Basic c2luZ2guc2F1cmF2QGljbG91ZC5jb206QVRBVFQzeEZmR0YwLUlaekVlUVBpQTJuWGFBQ3hwN1ZWY2pxckhZZmpGaDNha0FjbzJRd0JvdS1SdFNHbTc0bzAyUmRXcFZnVHJMbk9JdnZQck5rT3NLTDVWdnlMR2JRTElVYXAyN0tmeDNmLXA3X1RMMl9ZcDFwcFliVE03ZFUzbWpnRHMzZHVYcnFRbHZqZ2Z0cnotd00tcjNLSDN6ejlPMDFDSnQyZ2pMLU03R2FtRzcycjR3PUY3OUU2RjI3";
     private static final String CONTENT_TYPE_JSON = "application/json";
-    private static final String ATTACHMENT_PATH = "src/test/java/ecom/SG.png";
+    private static final String ATTACHMENT_PATH = "src/test/resources/SG.png";
     private static final String JSON_PAYLOAD_PATH = "src/test/resources/JiraBug.json";
 
     @Test

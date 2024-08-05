@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="All Test Suite">
+    <test name="TestCases">
+        <classes>
+            <class name="tests.BasicTest"/>
+            <class name="tests.DynamicJsonTest"/>
+            <class name="tests.EcomTest"/>
+            <class name="tests.JiraTest">
+                <methods>
+                    <include name="jiraBugTest"/>
+                </methods>
+            </class>
+            <class name="tests.OAuthTest"/>
+            <class name="tests.PrintCoursesTest"/>
+            <class name="tests.ComplexJsonPojoTest"/>
+            <class name="tests.ComplexJsonTest"/>
+            <class name="tests.GetF22FXCurvesTest"/>
+            <class name="tests.GetWMRatesTest"/>
+        </classes>
+    </test>
+</suite>

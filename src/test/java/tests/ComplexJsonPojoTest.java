@@ -1,6 +1,8 @@
 package tests;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.testng.Assert;
+import org.testng.annotations.Test;
 import pojo.ComplexJson;
 
 import java.io.File;
@@ -8,27 +10,30 @@ import java.io.IOException;
 import java.util.List;
 
 public class ComplexJsonPojoTest {
-    public static void main(String[] args) {
+
+    @Test
+    public void testComplexJsonParsing() {
         ObjectMapper mapper = new ObjectMapper();
         try {
-            File file =new File("src/test/resources/complex.json");
+            // Read the JSON file
+            File file = new File("src/test/resources/complex.json");
             ComplexJson.ComplexJsonData complexJsonData = mapper.readValue(file, ComplexJson.ComplexJsonData.class);
 
+            // Fetch courses and dashboard data
             List<ComplexJson.Course> courses = complexJsonData.getCourses();
-            System.out.println("Count of all the courses is " + courses.size());
-
             ComplexJson.Dashboard dashboard = complexJsonData.getDashboard();
             int totalAmount = dashboard.getPurchaseAmount();
-            System.out.println("Total Amount: " + totalAmount);
 
             int totalCalculatedAmount = 0;
 
+            // Loop through each course to calculate the total amount and print details
             for (ComplexJson.Course course : courses) {
                 String title = course.getTitle();
                 int price = course.getPrice();
                 int copies = course.getCopies();
                 totalCalculatedAmount += price * copies;
 
+                // Print details (optional for debug, not necessary for assertions)
                 System.out.println("Title: " + title + ", Price: " + price);
 
                 if ("RPA".equals(title)) {
@@ -47,16 +52,14 @@ public class ComplexJsonPojoTest {
                 }
             }
 
-            if (totalCalculatedAmount != totalAmount) {
-                System.err.println("Total Sum Test failed");
-            } else {
-                System.out.println("Total Sum Test passed");
-            }
+            // Use assertions to validate results
+            Assert.assertEquals(totalCalculatedAmount, totalAmount, "Total Sum Test failed");
 
         } catch (IOException e) {
-            System.err.println("Failed to read JSON file: " + e.getMessage());
+            // Handle exceptions using assertions
+            Assert.fail("Failed to read JSON file: " + e.getMessage());
         } catch (Exception e) {
-            System.err.println("An unexpected error occurred: " + e.getMessage());
+            Assert.fail("An unexpected error occurred: " + e.getMessage());
         }
     }
 }

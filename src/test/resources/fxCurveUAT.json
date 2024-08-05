@@ -4,7 +4,7 @@
     "region": "tok",
     "FXRates": [
         {
-            "bid": "0",
+            "bid": "10",
             "ask": "0",
             "asset": "fx",
             "currency": "AED",
@@ -12,7 +12,7 @@
             "tenorDate": "20240203"
         },
         {
-            "bid": "0.2",
+            "bid": "0.6",
             "ask": "0.3",
             "asset": "fx",
             "currency": "USD",

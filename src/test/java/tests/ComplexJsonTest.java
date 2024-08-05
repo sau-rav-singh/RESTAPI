@@ -2,6 +2,7 @@ package tests;
 
 import io.restassured.path.json.JsonPath;
 import org.testng.Assert;
+import org.testng.annotations.Test;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -10,20 +11,25 @@ import java.util.List;
 import java.util.Map;
 
 public class ComplexJsonTest {
-    public static void main(String[] args) {
+
+    @Test
+    public void testComplexJsonParsing() {
         try {
+            // Read the JSON file content
             String jsonContent = new String(Files.readAllBytes(Paths.get("src/test/resources/complex.json")));
             JsonPath jsonPath = new JsonPath(jsonContent);
 
+            // Fetch and print courses count
             List<Map<String, Object>> courses = jsonPath.getList("courses");
             System.out.println("Count of all the courses is " + courses.size());
 
+            // Fetch and print dashboard details
             Map<String, Object> dashboard = jsonPath.getMap("dashboard");
             Integer totalAmount = (Integer) dashboard.get("purchaseAmount");
             System.out.println("Total Amount: " + totalAmount);
 
+            // Calculate the total amount from courses
             int totalCalculatedAmount = 0;
-
             for (Map<String, Object> course : courses) {
                 String title = (String) course.get("title");
                 Integer price = (Integer) course.get("price");
@@ -50,14 +56,15 @@ public class ComplexJsonTest {
                 }
             }
 
+            // Validate the total amount calculated
             Assert.assertEquals(totalCalculatedAmount, totalAmount, "Total Sum Test");
 
         } catch (IOException e) {
-            System.err.println("Failed to read JSON file: " + e.getMessage());
+            Assert.fail("Failed to read JSON file: " + e.getMessage());
         } catch (ClassCastException e) {
-            System.err.println("Type casting issue: " + e.getMessage());
+            Assert.fail("Type casting issue: " + e.getMessage());
         } catch (Exception e) {
-            System.err.println("An unexpected error occurred: " + e.getMessage());
+            Assert.fail("An unexpected error occurred: " + e.getMessage());
         }
     }
 }

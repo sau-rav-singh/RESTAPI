@@ -1,7 +1,10 @@
-package RSV;
+package tests;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.testng.Assert;
+import org.testng.annotations.Test;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -9,10 +12,11 @@ import java.util.*;
 
 public class GetWMRatesTest {
 
-    public static void main(String[] args) {
+    @Test
+    public void testCompareRates() {
         try {
-            String uatJson = new String(Files.readAllBytes(Paths.get("src/test/java/RSV/getWMRatesUAT.json")));
-            String prodJson = new String(Files.readAllBytes(Paths.get("src/test/java/RSV/getWMRatesPROD.json")));
+            String uatJson = new String(Files.readAllBytes(Paths.get("src/test/resources/getWMRatesUAT.json")));
+            String prodJson = new String(Files.readAllBytes(Paths.get("src/test/resources/getWMRatesPROD.json")));
 
             List<Map<String, Object>> uatData = parseJson(uatJson);
             List<Map<String, Object>> prodData = parseJson(prodJson);
@@ -21,12 +25,13 @@ public class GetWMRatesTest {
             Map<String, Map<String, Object>> prodMap = createResponseMap(prodData);
 
             compareRates(uatMap, prodMap);
+
         } catch (IOException e) {
-            e.printStackTrace();
+            Assert.fail("Failed to read JSON files: " + e.getMessage());
         }
     }
 
-    public static List<Map<String, Object>> parseJson(String jsonResponse) {
+    private List<Map<String, Object>> parseJson(String jsonResponse) {
         List<Map<String, Object>> responseData = new ArrayList<>();
         try {
             JSONArray jsonArray = new JSONArray(jsonResponse);
@@ -41,21 +46,23 @@ public class GetWMRatesTest {
                 responseData.add(responseMap);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            Assert.fail("Error parsing JSON response: " + e.getMessage());
         }
         return responseData;
     }
 
-    public static Map<String, Map<String, Object>> createResponseMap(List<Map<String, Object>> responseList) {
+    private Map<String, Map<String, Object>> createResponseMap(List<Map<String, Object>> responseList) {
         Map<String, Map<String, Object>> responseMap = new HashMap<>();
         for (Map<String, Object> response : responseList) {
-            String key = String.valueOf(response.get("BaseCurrency")) + response.get("ContraCurrency") + response.get("Tenor");
+            String key = String.valueOf(response.get("BaseCurrency")) +
+                    response.get("ContraCurrency") +
+                    response.get("Tenor");
             responseMap.put(key, response);
         }
         return responseMap;
     }
 
-    public static void compareRates(Map<String, Map<String, Object>> uatMap, Map<String, Map<String, Object>> prodMap) {
+    private void compareRates(Map<String, Map<String, Object>> uatMap, Map<String, Map<String, Object>> prodMap) {
         for (String key : uatMap.keySet()) {
             if (prodMap.containsKey(key)) {
                 double uatBid = convertToDouble(uatMap.get(key).get("BID"));
@@ -63,19 +70,17 @@ public class GetWMRatesTest {
                 double uatAsk = convertToDouble(uatMap.get(key).get("ASK"));
                 double prodAsk = convertToDouble(prodMap.get(key).get("ASK"));
 
-                System.out.println("Comparing key: " + key);
-                System.out.println("UAT BID: " + uatBid + ", PROD BID: " + prodBid);
-                System.out.println("UAT ASK: " + uatAsk + ", PROD ASK: " + prodAsk);
-                System.out.println("BID Match: " + (uatBid == prodBid));
-                System.out.println("ASK Match: " + (uatAsk == prodAsk));
-                System.out.println();
+                // Use assertions to validate bid and ask values
+                Assert.assertEquals(uatBid, prodBid, "BID mismatch for key: " + key);
+                Assert.assertEquals(uatAsk, prodAsk, "ASK mismatch for key: " + key);
+
             } else {
-                System.out.println("Key " + key + " not found in PROD data.");
+                Assert.fail("Key " + key + " not found in PROD data.");
             }
         }
     }
 
-    public static double convertToDouble(Object value) {
+    private double convertToDouble(Object value) {
         if (value instanceof Number) {
             return ((Number) value).doubleValue();
         } else {
