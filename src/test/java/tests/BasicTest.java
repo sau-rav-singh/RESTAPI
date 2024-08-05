@@ -11,6 +11,7 @@ import pojo.AddPlace;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.List;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
@@ -29,7 +30,7 @@ public class BasicTest {
         addPlace.setName("Frontline house");
         addPlace.setPhoneNumber("(+91) 983 893 3937");
         addPlace.setAddress("29, side layout, cohen 09");
-        addPlace.setTypes(new String[]{"shoe park", "shop"});
+        addPlace.setTypes(List.of(new String[]{"shoe park", "shop"}));
         addPlace.setWebsite("http://google.com");
         addPlace.setLanguage("French-IN");
         return addPlace;

@@ -3,6 +3,8 @@ package pojo;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class AddPlace {
 
@@ -12,7 +14,7 @@ public class AddPlace {
     @JsonProperty("phone_number")
     private String phoneNumber;
     private String address;
-    private String[] types;
+    private List<String> types;
     private String website;
     private String language;
 
