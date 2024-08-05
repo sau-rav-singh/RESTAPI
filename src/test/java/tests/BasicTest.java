@@ -3,6 +3,7 @@ package tests;
 import io.restassured.RestAssured;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
+import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import pojo.AddPlace;
@@ -46,8 +47,16 @@ public class BasicTest {
 
         String postResponse = response.asString();
         JsonPath js = new JsonPath(postResponse);
+
         String placeId = js.get("place_id");
+        String status = js.get("status");
+        String scope = js.get("scope");
         System.out.println("place_id is " + placeId);
+
+        Assert.assertEquals(status, "OK", "Status should be OK");
+        Assert.assertEquals(scope, "APP", "Scope should be APP");
+        Assert.assertNotNull(placeId, "Place ID should not be null");
+        Assert.assertFalse(placeId.isEmpty(), "Place ID should not be empty");
     }
 
     @Test
