@@ -2,8 +2,10 @@ import io.restassured.RestAssured;
 import io.restassured.path.json.JsonPath;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+import pojo.CourseDetails;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static io.restassured.RestAssured.given;
@@ -29,7 +31,27 @@ public class OAuthTest {
 
     @Test
     public void getCourseDetails() {
-        String courseDetails = given().queryParam("access_token", accessToken).when().get("oauthapi/getCourseDetails").then().statusCode(200).extract().response().asString();
+        String courseDetails = given().queryParam("access_token", accessToken).when().get("oauthapi/getCourseDetails").then().log().all().statusCode(200).extract().response().asString();
         System.out.println(courseDetails);
+    }
+
+    @Test
+    public void getCourseAsPOJODetails() {
+        CourseDetails courseDetails = given().queryParam("access_token", accessToken).when().get("oauthapi/getCourseDetails").then().statusCode(200).extract().response().as(CourseDetails.class);
+        System.out.println("Instructor: " + courseDetails.getInstructor());
+        System.out.println("LinkedIn: " + courseDetails.getLinkedIn());
+        System.out.println("Services: " + courseDetails.getServices());
+        System.out.println("Expertise: " + courseDetails.getExpertise());
+        System.out.println("URL: " + courseDetails.getUrl());
+
+        Map<String, List<CourseDetails.Course>> courses = courseDetails.getCourses();
+
+        courses.forEach((category, courseList) -> {
+            System.out.println("Category: " + category);
+            courseList.forEach(course -> {
+                System.out.println("  Course Title: " + course.getCourseTitle());
+                System.out.println("  Price: " + course.getPrice());
+            });
+        });
     }
 }
