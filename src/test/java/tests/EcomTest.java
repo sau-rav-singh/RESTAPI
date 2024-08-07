@@ -17,7 +17,7 @@ public class EcomTest {
 
     @Test
     public void loginTest() {
-        RequestSpecification loginRequestSpec = new RequestSpecBuilder().setBaseUri("https://rahulshettyacademy.com").setContentType(ContentType.JSON).build();
+        RequestSpecification loginRequestSpec = new RequestSpecBuilder().setBaseUri("https://rahulshettyacademy.com").setContentType(ContentType.JSON).setRelaxedHTTPSValidation().build();
         LoginRequest loginRequest = new LoginRequest();
         loginRequest.setUserEmail("selena@gomez.com");
         loginRequest.setUserPassword("Iamking@000");
