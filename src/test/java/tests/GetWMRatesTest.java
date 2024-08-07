@@ -17,15 +17,11 @@ public class GetWMRatesTest {
         try {
             String uatJson = new String(Files.readAllBytes(Paths.get("src/test/resources/getWMRatesUAT.json")));
             String prodJson = new String(Files.readAllBytes(Paths.get("src/test/resources/getWMRatesPROD.json")));
-
             List<Map<String, Object>> uatData = parseJson(uatJson);
             List<Map<String, Object>> prodData = parseJson(prodJson);
-
             Map<String, Map<String, Object>> uatMap = createResponseMap(uatData);
             Map<String, Map<String, Object>> prodMap = createResponseMap(prodData);
-
             compareRates(uatMap, prodMap);
-
         } catch (IOException e) {
             Assert.fail("Failed to read JSON files: " + e.getMessage());
         }
@@ -69,17 +65,13 @@ public class GetWMRatesTest {
                 double prodBid = convertToDouble(prodMap.get(key).get("BID"));
                 double uatAsk = convertToDouble(uatMap.get(key).get("ASK"));
                 double prodAsk = convertToDouble(prodMap.get(key).get("ASK"));
-
-                // Use assertions to validate bid and ask values
                 Assert.assertEquals(uatBid, prodBid, "BID mismatch for key: " + key);
                 Assert.assertEquals(uatAsk, prodAsk, "ASK mismatch for key: " + key);
-
             } else {
                 Assert.fail("Key " + key + " not found in PROD data.");
             }
         }
     }
-
     private double convertToDouble(Object value) {
         if (value instanceof Number) {
             return ((Number) value).doubleValue();

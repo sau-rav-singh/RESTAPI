@@ -17,21 +17,16 @@ public class GetF22FXCurvesTest {
     @Test
     public void testFXCurvesComparison() {
         try {
-            // Read UAT and Prod JSON files into objects
             GetF22FXCurvesPOJO uatResponse = new ObjectMapper().readValue(new String(Files.readAllBytes(Paths.get("src/test/resources/fxCurveUAT.json"))), GetF22FXCurvesPOJO.class);
             GetF22FXCurvesPOJO prodResponse = new ObjectMapper().readValue(new String(Files.readAllBytes(Paths.get("src/test/resources/fxCurvePROD.json"))), GetF22FXCurvesPOJO.class);
 
-            // Get maps of FXRate data
             Map<String, GetF22FXCurvesPOJO.FXRate> uatRateMap = getMapOfFXRatesData(uatResponse);
             Map<String, GetF22FXCurvesPOJO.FXRate> prodRateMap = getMapOfFXRatesData(prodResponse);
 
-            // Compare UAT and Prod responses
             for (String key : uatRateMap.keySet()) {
                 if (prodRateMap.containsKey(key)) {
                     GetF22FXCurvesPOJO.FXRate uatRate = uatRateMap.get(key);
                     GetF22FXCurvesPOJO.FXRate prodRate = prodRateMap.get(key);
-
-                    // Compare bid and ask values or any other fields as needed
                     if (!uatRate.getBid().equals(prodRate.getBid()) || !uatRate.getAsk().equals(prodRate.getAsk())) {
                         Assert.fail("Mismatch found for key: " + key + "\nUAT Bid: " + uatRate.getBid() + ", Prod Bid: " + prodRate.getBid() + "\nUAT Ask: " + uatRate.getAsk() + ", Prod Ask: " + prodRate.getAsk());
                     }
@@ -39,14 +34,11 @@ public class GetF22FXCurvesTest {
                     Assert.fail("Key missing in Prod response: " + key);
                 }
             }
-
-            // Check for keys present in Prod but not in UAT
             for (String key : prodRateMap.keySet()) {
                 if (!uatRateMap.containsKey(key)) {
                     Assert.fail("Key missing in UAT response: " + key);
                 }
             }
-
         } catch (IOException e) {
             Assert.fail("Failed to read JSON file: " + e.getMessage());
         } catch (Exception e) {
@@ -58,7 +50,6 @@ public class GetF22FXCurvesTest {
         Map<String, GetF22FXCurvesPOJO.FXRate> parsedResponseMap = new HashMap<>();
         List<GetF22FXCurvesPOJO.FXRate> allFXRates = parsedResponse.getFXRates();
         for (GetF22FXCurvesPOJO.FXRate fxRate : allFXRates) {
-            // Create key as combination of currency and tenor
             String key = fxRate.getCurrency() + fxRate.getTenor();
             parsedResponseMap.put(key, fxRate);
         }
