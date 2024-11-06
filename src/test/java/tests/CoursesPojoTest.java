@@ -12,7 +12,7 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 
-public class PrintCoursesTest {
+public class CoursesPojoTest {
     @Test
     public void CoursesJSONPathTest() throws IOException {
         String jsonContent = new String(Files.readAllBytes(Paths.get("src/test/resources/Courses.json")));
