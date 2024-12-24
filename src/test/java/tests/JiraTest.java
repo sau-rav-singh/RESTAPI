@@ -25,11 +25,9 @@ public class JiraTest {
         RestAssured.baseURI = BASE_URI;
         String jsonPayload = readJsonPayload();
 
-        // Create Issue
         Response createIssueResponse = createIssue(jsonPayload);
         String bugKey = extractBugKey(createIssueResponse);
 
-        // Add Attachment
         Response addAttachmentResponse = addAttachment(bugKey);
         System.out.println("addAttachmentresponse: " + addAttachmentResponse.asString());
     }
