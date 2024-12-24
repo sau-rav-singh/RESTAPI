@@ -15,38 +15,30 @@ public class ComplexJsonTest {
     @Test
     public void testComplexJsonParsing() {
         try {
-            // Read the JSON file content
             String jsonContent = new String(Files.readAllBytes(Paths.get("src/test/resources/complex.json")));
             JsonPath jsonPath = new JsonPath(jsonContent);
 
-            // Fetch and print courses count
-            List<Map<String, Object>> courses = jsonPath.getList("courses");
+            List<Map<String, Object>> courses = jsonPath.get("courses");
             System.out.println("Count of all the courses is " + courses.size());
 
-            // Fetch and print dashboard details
-            Map<String, Object> dashboard = jsonPath.getMap("dashboard");
+            Map<String, Object> dashboard = jsonPath.get("dashboard");
             Integer totalAmount = (Integer) dashboard.get("purchaseAmount");
             System.out.println("Total Amount: " + totalAmount);
 
-            // Calculate the total amount from courses
             int totalCalculatedAmount = 0;
             for (Map<String, Object> course : courses) {
                 String title = (String) course.get("title");
                 Integer price = (Integer) course.get("price");
                 Integer copies = (Integer) course.get("copies");
                 totalCalculatedAmount += price * copies;
-
                 System.out.println("Title: " + title + ", Price: " + price);
-
                 if ("RPA".equals(title)) {
                     System.out.println("Copies of RPA sold are " + copies);
                 }
-
                 @SuppressWarnings("unchecked")
                 Map<String, Integer> salesMap = (Map<String, Integer>) course.get("sales");
                 System.out.println("Udemy Sales of " + title + " is " + salesMap.get("udemy"));
                 System.out.println("Website Sales of " + title + " is " + salesMap.get("website"));
-
                 @SuppressWarnings("unchecked")
                 List<Map<String, Object>> reviewsList = (List<Map<String, Object>>) course.get("reviews");
                 for (Map<String, Object> review : reviewsList) {
@@ -55,8 +47,6 @@ public class ComplexJsonTest {
                     System.out.println("Reviews from " + channel + " is " + reviewCount);
                 }
             }
-
-            // Validate the total amount calculated
             Assert.assertEquals(totalCalculatedAmount, totalAmount, "Total Sum Test");
 
         } catch (IOException e) {

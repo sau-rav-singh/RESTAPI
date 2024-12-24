@@ -1,6 +1,7 @@
 package tests;
 
 import io.restassured.RestAssured;
+import io.restassured.module.jsv.JsonSchemaValidator;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import org.testng.Assert;
@@ -9,6 +10,7 @@ import org.testng.annotations.Test;
 import pojo.AddPlace;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
@@ -43,8 +45,12 @@ public class BasicTest {
 
     @Test
     public void testPOJOAddPlace() {
+        InputStream createBookingJsonSchema = getClass().getClassLoader().getResourceAsStream("jsonSchemas/addFileSchema.json");
         AddPlace addPlace = setAddPlace();
-        Response response = given().queryParam("key", "qaclick123").header("Content-Type", "application/json").body(addPlace).when().post("maps/api/place/add/json").then().assertThat().statusCode(200).body("scope", equalTo("APP")).header("server", "Apache/2.4.52 (Ubuntu)").extract().response();
+        assert createBookingJsonSchema != null;
+        Response response = given().queryParam("key", "qaclick123").header("Content-Type", "application/json").body(addPlace).when().post("maps/api/place/add/json").then().assertThat().statusCode(200).body("scope", equalTo("APP")).header("server", "Apache/2.4.52 (Ubuntu)")
+                .body(JsonSchemaValidator.matchesJsonSchema(createBookingJsonSchema))
+                .extract().response();
 
         String postResponse = response.asString();
         JsonPath js = new JsonPath(postResponse);
