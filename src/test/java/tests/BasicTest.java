@@ -51,7 +51,6 @@ public class BasicTest {
         Response response = given().queryParam("key", "qaclick123").header("Content-Type", "application/json").body(addPlace).when().post("maps/api/place/add/json").then().assertThat().statusCode(200).body("scope", equalTo("APP")).header("server", "Apache/2.4.52 (Ubuntu)")
                 .body(JsonSchemaValidator.matchesJsonSchema(createBookingJsonSchema))
                 .extract().response();
-
         String postResponse = response.asString();
         JsonPath js = new JsonPath(postResponse);
 
